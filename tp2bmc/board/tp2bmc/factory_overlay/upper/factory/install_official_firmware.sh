@@ -1,13 +1,8 @@
 #!/bin/bash
 
 source config.sh
-echo -e "\n"
-echo -e "${YELLOW}Verify now if:${NC}"
-echo -e "${YELLOW}  - the fan is spinning${NC}"
-echo -e "${YELLOW}  - there is picture on the monitor${NC}"
-confirm "Confirm verification"
-echo -e "\n"
-read -p "Enter product serial from the sticker: " serial
+serial=$(cat /mnt/sdcard/serial.txt)
+serial=$(echo "$serial" | xargs)
 
 days_since_may() {
 # Extract year and month from PRODUCTION_TIME
@@ -59,9 +54,6 @@ if [[ $? -ne 0 ]]; then
     echo -e "${RED} Error burning eeprom!${NC}"
     exit 1
 fi
-
-echo "Running post test script.."
-./post_test.sh &
 
 ./install_firmware
 if [[ $? -ne 0 ]]; then
